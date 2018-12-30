@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Way Tracker</string>
+    <string name="post_description">Post Description</string>
+    <string name="submit_text">Submit</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="empty_view_thread">Send the first message!</string>
+    <string name="hint_message">Type your message..</string>
+    <string name="message_message_copied">Copied to clipboard</string>
+    <string name="clipboard_title_copied_message">Copied message</string>
+    <string name="today">Today</string>
+    <string name="error_loading_user">Couldn\'t load user</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="empty_view_home">Oh oh! Looks like you\'re all alone</string>
+
+</resources>
