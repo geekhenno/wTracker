@@ -11,6 +11,9 @@
     <string name="today">Today</string>
     <string name="error_loading_user">Couldn\'t load user</string>
     <string name="yesterday">Yesterday</string>
+    <string name="nav_home">haha</string>
+    <string name="nav_search">gaga</string>
+
     <string name="empty_view_home">Oh oh! Looks like you\'re all alone</string>
 
 </resources>

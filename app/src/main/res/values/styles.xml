@@ -9,7 +9,7 @@
         <item name="android:textDirection">locale</item>
         <item name="android:textAlignment">gravity</item>
     </style>
-
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="SendFabTheme" parent="AppTheme">
         <item name="colorAccent">@color/colorForeground</item>
     </style>
@@ -21,6 +21,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
     </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 
     <style name="tab_item">
         <item name="android:layout_width">match_parent</item>

@@ -42,7 +42,7 @@ import icepick.State;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
-public class ThreadActivity extends HomeActivity.BaseActivity implements TextWatcher {
+public class ChatPrivateActivity extends HomeActivity.BaseActivity implements TextWatcher {
 
     @BindView(R.id.activity_thread_toolbar)
     Toolbar toolbar;
@@ -103,6 +103,8 @@ public class ThreadActivity extends HomeActivity.BaseActivity implements TextWat
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+
                 user = dataSnapshot.getValue(User.class);
                 initializeMessagesRecycler();
                 displayUserDetails();
@@ -110,7 +112,7 @@ public class ThreadActivity extends HomeActivity.BaseActivity implements TextWat
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ThreadActivity.this, R.string.error_loading_user, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChatPrivateActivity.this, R.string.error_loading_user, Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -136,7 +138,7 @@ public class ThreadActivity extends HomeActivity.BaseActivity implements TextWat
                     Log.d("@@@@", "thread:signed_in:" + owner.getUid());
                 } else {
                     Log.d("@@@@", "thread:signed_out");
-                    Intent login = new Intent(ThreadActivity.this, HomeActivity.class);
+                    Intent login = new Intent(ChatPrivateActivity.this, HomeActivity.class);
                     startActivity(login);
                     finish();
                 }
@@ -183,7 +185,7 @@ public class ThreadActivity extends HomeActivity.BaseActivity implements TextWat
         String ownerUid = owner.getUid();
         String userUid = user.getUserid();
         Message message =
-                new Message(timestamp, -timestamp, dayTimestamp, body, ownerUid, userUid);
+                new Message(timestamp, -timestamp, dayTimestamp, body, ownerUid, userUid,owner.getDisplayName());
         mDatabase
                 .child("notifications")
                 .child("messages")

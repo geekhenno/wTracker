@@ -12,17 +12,27 @@ public class Message {
     private String body;
     private String from;
     private String to;
+    private String name;
 
-    public Message(long timestamp, long negatedTimestamp, long dayTimestamp, String body, String from, String to) {
+    public Message(long timestamp, long negatedTimestamp, long dayTimestamp, String body, String from, String to ,String name) {
         this.timestamp = timestamp;
         this.negatedTimestamp = negatedTimestamp;
         this.dayTimestamp = dayTimestamp;
         this.body = body;
         this.from = from;
         this.to = to;
+        this.name = name;
     }
 
     public Message() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getTimestamp() {

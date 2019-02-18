@@ -11,19 +11,41 @@ public class User {
     private String userid;
     private String name;
     private String email;
+    private double latit;
+    private double longi;
+    long timestamp ;
+    long dayTimestamp ;
 
     public User() {
     }
 
-    public User(String name, String email, String userid, String profileImg) {
+    public long getTimestamp() {
+        return timestamp;
+    }
 
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
+    public long getDayTimestamp() {
+        return dayTimestamp;
+    }
+
+    public void setDayTimestamp(long dayTimestamp) {
+        this.dayTimestamp = dayTimestamp;
+    }
+
+    public User(String profileImg, String userid, String name, String email, double latit, double longi , long timestamp, long dayTimestamp) {
+        this.profileImg = profileImg;
+        this.userid = userid;
         this.name = name;
         this.email = email;
-        this.userid = userid;
-        this.profileImg=profileImg;
-
+        this.latit = latit;
+        this.longi = longi;
+        this.timestamp=timestamp;
+        this.dayTimestamp=dayTimestamp;
     }
+
 
     public String getProfileImg() {
         return profileImg;
@@ -56,4 +78,21 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public double getLatit() {
+        return latit;
+    }
+
+    public void setLatit(double latit) {
+        this.latit = latit;
+    }
+
+    public double getLongi() {
+        return longi;
+    }
+
+    public void setLongi(double longi) {
+        this.longi = longi;
+    }
 }
+

@@ -1,34 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    tools:layout_editor_absoluteY="25dp">
 
 
+    <com.hennonoman.wTracker.widgets.EmptyStateRecyclerView
+        android:id="@+id/activity_main_groups_recycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="@dimen/simple_padding_medium"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/groups_list" />
+
+    <TextView
+        android:id="@+id/activity_main_group_empty_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="@string/empty_view_home"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-        <com.hennonoman.wTracker.widgets.EmptyStateRecyclerView
-            android:id="@+id/activity_main_groups_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:padding="@dimen/simple_padding_medium"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/groups_list" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/create_group"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="40dp"
+        app:fabCustomSize="30dp"
+        android:src="@drawable/create_user_group"
+        app:layout_anchor="@+id/activity_main_group_empty_view"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/join_group"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/activity_main_group_empty_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/simple_padding_huge"
-            android:layout_marginStart="@dimen/simple_padding_huge"
-            android:gravity="center"
-            android:text="@string/empty_view_home"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/join_group"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="56dp"
+        android:layout_marginEnd="40dp"
+        android:src="@drawable/joingroupscopy"
+        android:scaleType="fitCenter"
+        app:fabCustomSize="30dp"
+        app:layout_anchor="@+id/activity_main_group_empty_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    </android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>
 
 
 

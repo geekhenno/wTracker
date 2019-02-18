@@ -12,7 +12,7 @@ import  android.support.v4.app.Fragment;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.hennonoman.wTracker.Fragments.Friend_Fragment;
-import com.hennonoman.wTracker.Fragments.GroupFragment;
+import com.hennonoman.wTracker.Fragments.GroupList_Fragment;
 import com.hennonoman.wTracker.Fragments.Profile_Fragment;
 import com.hennonoman.wTracker.Fragments.MapviewFragment;
 
@@ -27,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private final Fragment[] PAGES = new Fragment[] {
             new MapviewFragment(),
-            new Friend_Fragment(),
+            new GroupList_Fragment(),
             new Friend_Fragment(),
             new Profile_Fragment()
 
@@ -66,10 +66,10 @@ public class HomeActivity extends AppCompatActivity {
          tabLayout =  findViewById(R.id.tablayout);
 
         tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.logo_w);
-        tabLayout.getTabAt(1).setIcon(R.drawable.logo_w);
-        tabLayout.getTabAt(2).setIcon(R.drawable.logo_w);
-        tabLayout.getTabAt(3).setIcon(R.drawable.logo_w);
+        tabLayout.getTabAt(0).setIcon(R.drawable.home);
+        tabLayout.getTabAt(1).setIcon(R.drawable.group_icon2);
+        tabLayout.getTabAt(2).setIcon(R.drawable.groups_icon);
+        tabLayout.getTabAt(3).setIcon(R.drawable.man_icon);
 
 
 

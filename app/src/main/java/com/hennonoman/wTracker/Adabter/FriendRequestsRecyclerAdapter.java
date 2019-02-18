@@ -21,9 +21,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.hennonoman.wTracker.Fragments.Friend_Fragment;
 import com.hennonoman.wTracker.R;
 import com.hennonoman.wTracker.model.User;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -61,7 +64,6 @@ public class FriendRequestsRecyclerAdapter extends RecyclerView.Adapter<FriendRe
         final FirebaseAuth mAuth =FirebaseAuth.getInstance();
         final FirebaseUser mUser = mAuth.getCurrentUser();
         user = userList.get(position);
-
         mDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mDatabase.getReference().child("friends").child(mUser.getUid());
         mDatabaseReference_other = mDatabase.getReference().child("friends").child(user.getUserid());
@@ -95,18 +97,17 @@ public class FriendRequestsRecyclerAdapter extends RecyclerView.Adapter<FriendRe
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
 
+                            Toast.makeText(context, user.getUserid(), Toast.LENGTH_SHORT).show();
 
-                                dataSnapshot.getRef().child(user.getUserid()).setValue(user);
-
-
+                               dataSnapshot.getRef().child(user.getUserid()).setValue(user);
 
                                 mDatabaseReference_requests.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         dataSnapshot.getRef().child(user.getUserid()).removeValue();
 
-                                        userList.remove(position);
-                                        notifyItemRemoved(position);
+
+                                        Friend_Fragment.tabLayout.setBadgeText(1, getItemCount()+"");
 
 
                                     }
@@ -119,7 +120,6 @@ public class FriendRequestsRecyclerAdapter extends RecyclerView.Adapter<FriendRe
 
 
 
-                            Toast.makeText(context, "Accept friend Successfully", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
@@ -132,9 +132,17 @@ public class FriendRequestsRecyclerAdapter extends RecyclerView.Adapter<FriendRe
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            User user = new User(mUser.getDisplayName(),mUser.getEmail(),mUser.getUid(),mUser.getPhotoUrl().toString());
 
-                            dataSnapshot.getRef().child(user.getUserid()).setValue(user);
+                            long timestamp = new Date().getTime();
+                            long dayTimestamp = getDayTimestamp(timestamp);
+                            User user = new User(mUser.getPhotoUrl().toString(),mUser.getUid(),mUser.getDisplayName(),mUser.getEmail(),0,0,timestamp,dayTimestamp);
+
+
+                            userList.remove(position);
+                            notifyDataSetChanged();
+                           dataSnapshot.getRef().child(user.getUserid()).setValue(user);
+                            Toast.makeText(context, "Accept friend Successfully", Toast.LENGTH_SHORT).show();
+
 
                         }
 
@@ -145,7 +153,9 @@ public class FriendRequestsRecyclerAdapter extends RecyclerView.Adapter<FriendRe
                     });
 
 
+
                 }
+
             });
 
             holder.reject_friend_button.setOnClickListener(new View.OnClickListener() {
@@ -160,10 +170,11 @@ public class FriendRequestsRecyclerAdapter extends RecyclerView.Adapter<FriendRe
                             mDatabaseReference_requests.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    dataSnapshot.getRef().child(user.getUserid()).removeValue();
+                                   dataSnapshot.getRef().child(userList.get(holder.getLayoutPosition()).getUserid()).removeValue();
                                     userList.remove(position);
-                                    notifyItemRemoved(position);
+                                    notifyDataSetChanged();
                                     Toast.makeText(context, "Reject friend Successfully", Toast.LENGTH_SHORT).show();
+                                    Friend_Fragment.tabLayout.setBadgeText(1, getItemCount()+"");
 
                                 }
 
@@ -242,5 +253,15 @@ public class FriendRequestsRecyclerAdapter extends RecyclerView.Adapter<FriendRe
 
 
         }
+    }
+
+    private long getDayTimestamp(long timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        return calendar.getTimeInMillis();
     }
 }

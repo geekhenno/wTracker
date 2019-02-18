@@ -53,11 +53,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hennonoman.wTracker.BuildConfig;
 import com.hennonoman.wTracker.R;
 import com.karumi.dexter.Dexter;
@@ -96,10 +99,12 @@ public class MapviewFragment extends Fragment implements OnMapReadyCallback {
 
     Marker now;
 
+
     double latitude;
     double longitude;
     String address = "";
     private GoogleMap mMap;
+    Context context;
     MapView map_view;
     // location last updated time
     private String mLastUpdateTime;
@@ -121,10 +126,13 @@ public class MapviewFragment extends Fragment implements OnMapReadyCallback {
     // boolean flag to toggle the ui
     private Boolean mRequestingLocationUpdates;
     private static final String TAG = MapviewFragment.class.getSimpleName();
-//
-    FirebaseDatabase database;
-    DatabaseReference myRef;
 
+
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabaseRequests;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     public static Activity activity;
     View mapView;
@@ -175,6 +183,7 @@ public class MapviewFragment extends Fragment implements OnMapReadyCallback {
 
         View view = inflater.inflate(R.layout.fragment_mapview,container,false);
 
+        context =getContext();
 
         View locationButton = ((View) view.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
@@ -182,6 +191,11 @@ public class MapviewFragment extends Fragment implements OnMapReadyCallback {
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
         rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         rlp.setMargins(0, 0, 0, 200);
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
 
         ButterKnife.bind(getActivity());
         init();
@@ -312,46 +326,25 @@ public class MapviewFragment extends Fragment implements OnMapReadyCallback {
      */
     private void updateLocationUI() {
 
-        //   int height = (int) convertDpToPixel(56,getContext());
-        // int width = (int) convertDpToPixel(56,getContext());
-
-
-//        Bitmap resizedBitmap = Bitmap.createScaledBitmap(HomeActivity.bitmap_profile, 100, 100, false);
         if (mCurrentLocation != null) {
             latitude = mCurrentLocation.getLatitude();
             longitude = mCurrentLocation.getLongitude();
+
             getAddress();
              location = new LatLng(latitude, longitude);
 
-//             myRef.addValueEventListener(new ValueEventListener() {
-//                 @Override
-//                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                     DataSnapshot groupsSnapshot = dataSnapshot.child("groups");
-//                     Iterable<DataSnapshot> contactChildren = groupsSnapshot.getChildren();
-//                     for (DataSnapshot group : contactChildren)
-//                     {
-////                         GroupInfo gInfo = new GroupInfo();
-////                         gInfo.setGroupId(group.child("groupId").getValue().toString());
-////                         myRef.child("groups").child(gInfo.getGroupId()).child("latit").setValue(latitude);
-////                         myRef.child("groups").child(gInfo.getGroupId()).child("longi").setValue(longitude);
-//                     }
-//
-//
-//                 }
-//
-//                 @Override
-//                 public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                 }
-//             });
+            String instanceId = FirebaseInstanceId.getInstance().getToken();
+            if (instanceId != null) {
+                mDatabase.child(mUser.getUid())
+                        .child("latit")
+                        .setValue(latitude);
 
-          //  myRef.child("groups").child("-LM_d49dZ-Q7Tc6oTiuW").child("longi").setValue(longitude);
-            // mMap.clear();
-//            Marker marker= mMap.addMarker(new MarkerOptions().position(location)
-//                  .flat(true).title(HomeActivity.usernameProfile));
+                mDatabase.child(mUser.getUid())
+                        .child("longi")
+                        .setValue(longitude);
+            }
+
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
-            //Toast.makeText(this, "Last updated on: "+mLastUpdateTime, Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -539,17 +532,17 @@ public class MapviewFragment extends Fragment implements OnMapReadyCallback {
     public void onPause() {
         super.onPause();
 
-        if (mRequestingLocationUpdates) {
-            // pausing location updates
-            stopLocationUpdates();
-        }
+//        if (mRequestingLocationUpdates) {
+//            // pausing location updates
+//            stopLocationUpdates();
+//        }
     }
 
     public Address getAddress(double latitude, double longitude)
     {
         Geocoder geocoder;
         List<Address> addresses;
-        geocoder = new Geocoder(getContext(), Locale.getDefault());
+        geocoder = new Geocoder(context, Locale.getDefault());
 
         try {
             addresses = geocoder.getFromLocation(latitude,longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
@@ -619,30 +612,7 @@ public class MapviewFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-    private void drawCircle(LatLng point){
 
-        // Instantiating CircleOptions to draw a circle around the marker
-        CircleOptions circleOptions = new CircleOptions();
-
-        // Specifying the center of the circle
-        circleOptions.center(point);
-
-        // Radius of the circle
-        circleOptions.radius(100);
-
-        // Border color of the circle
-        circleOptions.strokeColor(Color.BLACK);
-
-        // Fill color of the circle
-        circleOptions.fillColor(0x30ff0000);
-
-        // Border width of the circle
-        circleOptions.strokeWidth(2);
-
-        // Adding the circle to the GoogleMap
-        mMap.addCircle(circleOptions);
-
-    }
     public interface MapviewInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

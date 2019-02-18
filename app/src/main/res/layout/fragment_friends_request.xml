@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     >
 
-    <android.support.v7.widget.RecyclerView
+    <com.hennonoman.wTracker.widgets.EmptyStateRecyclerView
 
         android:id="@+id/recyclerView_myfriends_request"
         android:layout_width="0dp"

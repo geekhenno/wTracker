@@ -27,7 +27,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.hennonoman.wTracker.Adabter.FriendListRecyclerAdapter;
 import com.hennonoman.wTracker.HomeActivity;
 import com.hennonoman.wTracker.MainActivity;
 import com.hennonoman.wTracker.R;
@@ -53,10 +52,6 @@ public class Profile_Fragment extends Fragment {
     Button signout_button;
     TextView show_username , show_email;
 
-
-
-    private FriendListRecyclerAdapter blogRecyclerAdapter;
-    private List<User> blogList;
 
     public Profile_Fragment()
     {
@@ -109,68 +104,6 @@ public class Profile_Fragment extends Fragment {
             }
         });
 
-//
-//
-
-      //  mDatabaseReference.keepSynced(true);
-//        recyclerView =  view.findViewById(R.id.recyclerView_mypost);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        load_progress = view.findViewById(R.id.load_progress_mypost);
-//        load_progress.setVisibility(View.VISIBLE);
-
-
-
-
-
-//        mDatabaseReference.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s)
-//            {
-//
-////                User blog = dataSnapshot.getValue(User.class);
-////
-////                if(blog.getUserid().equals(mUser.getUid()))
-////                {
-////                    blogList.add(blog);
-////                    Collections.reverse(blogList);
-////                    blogRecyclerAdapter = new FriendListRecyclerAdapter(getContext(),blogList);
-////                    recyclerView.setAdapter(blogRecyclerAdapter);
-////                    blogRecyclerAdapter.notifyDataSetChanged();
-////                }
-////
-////
-////
-////
-////                load_progress.setVisibility(View.INVISIBLE);
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//
-//
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                load_progress.setVisibility(View.INVISIBLE);
-//            }
-//        });
-
 
         return view;
     }
@@ -187,8 +120,8 @@ public class Profile_Fragment extends Fragment {
     {
 
         AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
-        dialog.setTitle("FEED ME");
-        dialog.setIcon(R.drawable.feed_me);
+        dialog.setTitle("WAY TRACKER");
+        dialog.setIcon(R.drawable.logo_w);
         dialog.setMessage("Are you sure you want to sign out ?");
 
         dialog.setButton(AlertDialog.BUTTON_NEGATIVE,"No", new DialogInterface.OnClickListener() {

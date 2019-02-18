@@ -1,7 +1,11 @@
 package com.hennonoman.wTracker;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -31,6 +35,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.hennonoman.wTracker.model.User;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,14 +46,22 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     Button signin;
     ProgressBar progressBar;
-    private DatabaseReference mDatabase;
     private GoogleApiClient mGoogleApiClient;
+    private DatabaseReference mDatabase;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
 
 
+    double latit=0,longi=0;
+    private static final long LOCATION_REFRESH_TIME = 1000;
+    // fastest updates interval - 3 sec
+    // location updates will be received if another app is requesting the locations
+    // than your app can handle
+    private static final long LOCATION_REFRESH_DISTANCE = 1000;
     private String[] permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission
             .ACCESS_FINE_LOCATION};
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +70,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         signin = findViewById(R.id.signin);
         progressBar = findViewById(R.id.signin_progress);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
 
 
         // ask for permissions
@@ -85,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-        mAuth = FirebaseAuth.getInstance();
+
 
 
 
@@ -120,11 +136,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void addUserToDatabase(FirebaseUser firebaseUser) {
+        long timestamp = new Date().getTime();
+        long dayTimestamp = getDayTimestamp(timestamp);
+
+
         User user = new User(
+                firebaseUser.getPhotoUrl() == null ? "" : firebaseUser.getPhotoUrl().toString(),
+                firebaseUser.getUid(),
                 firebaseUser.getDisplayName(),
                 firebaseUser.getEmail(),
-                firebaseUser.getUid(),
-                firebaseUser.getPhotoUrl() == null ? "" : firebaseUser.getPhotoUrl().toString()
+                latit,
+                longi,
+                timestamp,
+                dayTimestamp
         );
 
         mDatabase.child("users")
@@ -269,5 +293,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         requestPermissions(remainingPermissions.toArray(new String[remainingPermissions.size()]), 101);
+    }
+
+
+    private long getDayTimestamp(long timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        return calendar.getTimeInMillis();
     }
 }
